@@ -120,7 +120,8 @@
 
   <script type='text/javascript'>
 
-  domain = 'https://robi-flower-power-api.herokuapp.com'
+  // domain = 'https://robi-flower-power-api.herokuapp.com';
+  domain = 'http://localhost:3000';
   var cart = [];
   $.template( "flowerTemplate", $('#flowerTemplate') );
   $.template( "orderTemplate", $('#orderTemplate') );
@@ -160,7 +161,7 @@
   function complete_order() {
     $.post({
       url: domain + '/orders',
-      data: { flower_ids: cart },
+      data: { flower_ids: cart, delivery_address: 'New Street 1a' },
       success: function(){
 
       }
@@ -173,9 +174,9 @@
       success: function(data) {
         new_data = data.map(function(el) {
           return {
-            total_price: el['order']['total_price'],
-            flower_names: el['flowers'],
-            delivery_address: el['order']['delivery_address']
+            total_price: el.total_price,
+            flower_names: el.flowers.map(flower => flower.name).join(', '),
+            delivery_address: el.delivery_address
           }
         });
         $('#mainContainer').empty();
